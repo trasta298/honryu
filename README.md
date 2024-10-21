@@ -12,8 +12,8 @@ Honryu (翻流) is a screen capture and translation tool designed for Windows. I
 ## 🖥️ Requirements
 
 - Windows operating system
-- Python 3.10 or higher
 - API key for the Gemini API
+- [astral-sh/uv](https://github.com/astral-sh/uv#installation)
 
 ## 🚀 Installation
 
@@ -39,16 +39,7 @@ Honryu (翻流) is a screen capture and translation tool designed for Windows. I
      GENAI_MODEL=gemini-1.5-pro-002
      ```
 
-4. Configure the VBS script:
-   - Open `honryu.vbs` in a text editor
-   - Modify the following line to point to your Python interpreter:
-     ```vbs
-     WshShell.Run "C:\Path\To\Your\Python\python.exe main.py", 0, False
-     ```
-   - Replace `C:\Path\To\Your\Python\python.exe` with the actual path to your Python executable
-   - Save the changes
-
-5. (Optional) Create a shortcut:
+4. (Optional) Create a shortcut:
    - Right-click on `honryu.vbs` and select "Create shortcut"
    - Move the shortcut to a convenient location (e.g., desktop)
    - You can rename the shortcut for easier access
