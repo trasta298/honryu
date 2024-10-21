@@ -28,11 +28,15 @@ Honryu (翻流) is a screen capture and translation tool designed for Windows. I
    uv sync
    ```
 
-3. Set up your Gemini API key:
+3. Set up your Gemini API key and optionally specify the model:
    - Create a `.env` file in the project root directory
    - Add your API key to the file:
      ```
      GENAI_API_KEY=your_api_key_here
+     ```
+   - (Optional) Specify a different model by adding:
+     ```
+     GENAI_MODEL=gemini-1.5-pro-002
      ```
 
 4. Configure the VBS script:

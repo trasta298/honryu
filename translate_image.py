@@ -82,8 +82,7 @@ def get_safety_settings():
     }
 
 
-async def transcribe_and_translate_image_stream(image: bytes, api_key: str) -> AsyncGenerator[tuple[str, str, str], None]:
-    gen_model = initialize_genai(api_key)
+async def transcribe_and_translate_image_stream(gen_model: genai.GenerativeModel, image: bytes) -> AsyncGenerator[tuple[str, str, str], None]:
     prompt = get_prompt()
     contents = prepare_contents(prompt, image)
 

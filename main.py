@@ -11,7 +11,8 @@ from PIL import Image
 from PyQt6 import QtCore, QtGui, QtWidgets
 from qt_material import apply_stylesheet
 
-from translate_image import transcribe_and_translate_image_stream
+from translate_image import (initialize_genai,
+                             transcribe_and_translate_image_stream)
 
 load_dotenv()
 
@@ -20,7 +21,10 @@ class SelectWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.api_key = os.getenv("GENAI_API_KEY", "")
+        api_key = os.getenv("GENAI_API_KEY", "")
+        model_name = os.getenv("GENAI_MODEL", "gemini-1.5-flash-002")
+
+        self.model = initialize_genai(api_key, model_name)
 
         self.total_geometry = QtCore.QRect()
         for screen in QtWidgets.QApplication.screens():
@@ -115,7 +119,7 @@ class SelectWidget(QtWidgets.QWidget):
             img.save(img_byte_arr, format='JPEG')
             image_bytes = img_byte_arr.getvalue()
 
-        async for detected_lang, ja_text, en_text in transcribe_and_translate_image_stream(image_bytes, self.api_key):
+        async for detected_lang, ja_text, en_text in transcribe_and_translate_image_stream(self.model, image_bytes):
             self.result_dialog.update_results(detected_lang, ja_text, en_text)
 
     def keyPressEvent(self, event):
