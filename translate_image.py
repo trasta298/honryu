@@ -35,7 +35,8 @@ def get_prompt() -> str:
        - Preserve the tone, style, and intent of the original text.
        - Adapt idiomatic expressions and cultural nuances appropriately.
     6. Ensure both the transcription and translation accurately reflect the original image text in content and format.
-    7. Output the result in the following JSON format:
+    7. Always provide both the original text and its translation, regardless of the detected language.
+    8. Output the result in the following JSON format:
         ```json
         {
             "detected_language": "The detected language (either 'ja' or 'en')",
@@ -59,7 +60,6 @@ def prepare_contents(prompt: str, image: bytes) -> list[Content]:
 def get_generation_config():
     return genai.GenerationConfig(
         temperature=0,
-        max_output_tokens=1000,
         response_mime_type="application/json",
         response_schema={
             "type": "object",
@@ -116,7 +116,7 @@ async def transcribe_and_translate_image_stream(gen_model: genai.GenerativeModel
 
     # 最終的な完全なJSONを返す
     try:
-        final_json = json.loads(all_text)
+        final_json = json.loads(res.text)
         yield (final_json["detected_language"], final_json["ja"], final_json["en"])
     except json.JSONDecodeError:
         raise Exception("最終的なJSONのデコードに失敗しました")
