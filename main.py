@@ -57,7 +57,7 @@ class SelectWidget(QtWidgets.QWidget):
         qp = QtGui.QPainter(self)
         qp.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
 
-        qp.setBrush(QtGui.QColor(0, 0, 0, 128))
+        qp.setBrush(QtGui.QColor(0, 0, 0, 150))
         qp.setPen(QtCore.Qt.PenStyle.NoPen)
         qp.drawRect(self.rect())
 
