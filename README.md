@@ -1,25 +1,25 @@
-# Honryu
+# 🌊 Honryu
 
-Honryu (翻流) is an open-source screen capture and translation tool designed for Windows. It allows users to capture a portion of their screen and instantly transcribe and translate the text within the image.
+Honryu (翻流) is a screen capture and translation tool designed for Windows. It allows users to capture a portion of their screen and instantly transcribe and translate the text within the image.
 
-## Features
+## ✨ Features
 
 - Screen area selection for capture
 - Automatic text recognition from captured images
 - Translation between Japanese and English
 - Real-time display of transcription and translation results
 
-## Requirements
+## 🖥️ Requirements
 
 - Windows operating system
 - Python 3.10 or higher
 - API key for the Gemini API
 
-## Installation
+## 🚀 Installation
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/honryu.git
+   git clone https://github.com/trasta298/honryu.git
    cd honryu
    ```
 
@@ -49,11 +49,10 @@ Honryu (翻流) is an open-source screen capture and translation tool designed f
    - Move the shortcut to a convenient location (e.g., desktop)
    - You can rename the shortcut for easier access
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Disclaimer
+## ⚠️ Disclaimer
 
 This application currently only works on Windows.
-
