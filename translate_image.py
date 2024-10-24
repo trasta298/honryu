@@ -93,6 +93,11 @@ async def transcribe_and_translate_image_stream(gen_model: genai.GenerativeModel
         stream=True,
     )
 
+    async for detected_lang, ja_text, en_text in process_response_stream(res):
+        yield detected_lang, ja_text, en_text
+
+
+async def process_response_stream(res) -> AsyncGenerator[tuple[str, str, str], None]:
     all_text = ""
     partial_result = {"detected_language": "", "ja": "", "en": ""}
     key_patterns = {
@@ -104,19 +109,24 @@ async def transcribe_and_translate_image_stream(gen_model: genai.GenerativeModel
     async for chunk in res:
         if chunk.text:
             all_text += chunk.text
-            for key, pattern in key_patterns.items():
-                match = re.search(pattern, all_text)
-                if match:
-                    value = match.group(1)
-                    # エスケープされた文字を適切に処理
-                    value = value.replace('\\"', '"').replace('\\n', '\n').replace('\\\\', '\\')
-                    partial_result[key] = value
+            update_partial_result(all_text, partial_result, key_patterns)
+            yield partial_result["detected_language"], partial_result["ja"], partial_result["en"]
 
-            yield (partial_result["detected_language"], partial_result["ja"], partial_result["en"])
+    yield_final_result(res)
 
-    # 最終的な完全なJSONを返す
+
+def update_partial_result(all_text: str, partial_result: dict, key_patterns: dict):
+    for key, pattern in key_patterns.items():
+        match = re.search(pattern, all_text)
+        if match:
+            value = match.group(1)
+            value = value.replace('\\"', '"').replace('\\n', '\n').replace('\\\\', '\\')
+            partial_result[key] = value
+
+
+def yield_final_result(res):
     try:
         final_json = json.loads(res.text)
-        yield (final_json["detected_language"], final_json["ja"], final_json["en"])
+        yield final_json["detected_language"], final_json["ja"], final_json["en"]
     except json.JSONDecodeError:
-        raise Exception("最終的なJSONのデコードに失敗しました")
+        raise Exception("failed to decode final json")
