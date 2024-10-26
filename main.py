@@ -106,8 +106,8 @@ class SelectWidget(QtWidgets.QWidget):
             "height": bottom - top
         }
 
-        full_screenshot = self.sct.grab(monitor)
-        img = Image.frombytes("RGB", full_screenshot.size, full_screenshot.rgb)
+        screenshot = self.sct.grab(monitor)
+        img = Image.frombytes("RGB", screenshot.size, screenshot.rgb)
 
         asyncio.create_task(self.transcribe_image(img))
 
