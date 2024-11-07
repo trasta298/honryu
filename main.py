@@ -37,14 +37,6 @@ class SelectWidget(QtWidgets.QWidget):
 
         self.sct = mss.mss()
 
-        self.offset = self.mapToGlobal(QtCore.QPoint(0, 0))
-
-        primary_screen = QtWidgets.QApplication.primaryScreen()
-        if primary_screen is None:
-            print("Primary screen not found")
-            sys.exit(1)
-        self.primary_scale_factor = primary_screen.devicePixelRatio()
-
         self.escape_pressed = False
 
         QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CursorShape.CrossCursor))
@@ -75,6 +67,7 @@ class SelectWidget(QtWidgets.QWidget):
 
     def mousePressEvent(self, event):
         self.begin = event.position().toPoint()
+        self.global_begin = event.globalPosition().toPoint()
         self.end = self.begin
         self.update()
 
@@ -84,15 +77,16 @@ class SelectWidget(QtWidgets.QWidget):
 
     def mouseReleaseEvent(self, event):
         self.end = event.position().toPoint()
+        self.global_end = event.globalPosition().toPoint()
         self.close()
 
-        begin_point = self.begin + self.offset
-        end_point = self.end + self.offset
+        adjusted_begin = self.adjust_coordinates(self.global_begin)
+        adjusted_end = self.adjust_coordinates(self.global_end)
 
-        x1 = int(begin_point.x() * self.primary_scale_factor)
-        y1 = int(begin_point.y() * self.primary_scale_factor)
-        x2 = int(end_point.x() * self.primary_scale_factor)
-        y2 = int(end_point.y() * self.primary_scale_factor)
+        x1 = int(adjusted_begin.x())
+        y1 = int(adjusted_begin.y())
+        x2 = int(adjusted_end.x())
+        y2 = int(adjusted_end.y())
 
         left = min(x1, x2)
         top = min(y1, y2)
@@ -126,6 +120,24 @@ class SelectWidget(QtWidgets.QWidget):
         if event.key() == QtCore.Qt.Key.Key_Escape:
             self.escape_pressed = True
             self.close()
+
+    def adjust_coordinates(self, global_pos):
+        for screen in QtWidgets.QApplication.screens():
+            screen_geometry = screen.geometry()
+            if screen_geometry.contains(global_pos):
+                local_x = global_pos.x() - screen_geometry.x()
+                local_y = global_pos.y() - screen_geometry.y()
+
+                scale_factor = screen.devicePixelRatio()
+                scaled_x = local_x * scale_factor
+                scaled_y = local_y * scale_factor
+
+                return QtCore.QPoint(
+                    int(scaled_x + screen_geometry.x()),
+                    int(scaled_y + screen_geometry.y())
+                )
+
+        return global_pos
 
 
 class ResultDialog(QtWidgets.QDialog):

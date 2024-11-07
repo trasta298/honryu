@@ -2,6 +2,12 @@
 
 # pycache
 __pycache__/
+tmp/
+build/
+dist/
+
+*.pyc
+*.spec
 
 # lnk
 *.lnk
