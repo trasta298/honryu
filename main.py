@@ -14,6 +14,11 @@ from qt_material import apply_stylesheet
 from translate_image import (initialize_genai,
                              transcribe_and_translate_image_stream)
 
+f = open(os.devnull, 'w')
+sys.stderr = f
+sys.stdout = f
+sys.stdin = f
+
 load_dotenv()
 
 
@@ -23,6 +28,10 @@ class SelectWidget(QtWidgets.QWidget):
 
         api_key = os.getenv("GENAI_API_KEY", "")
         model_name = os.getenv("GENAI_MODEL", "gemini-1.5-flash-002")
+
+        if not api_key:
+            self.show_api_key_error()
+            return
 
         self.model = initialize_genai(api_key, model_name)
 
@@ -138,6 +147,14 @@ class SelectWidget(QtWidgets.QWidget):
                 )
 
         return global_pos
+
+    def show_api_key_error(self):
+        error_dialog = QtWidgets.QMessageBox()
+        error_dialog.setIcon(QtWidgets.QMessageBox.Icon.Critical)
+        error_dialog.setWindowTitle("エラー")
+        error_dialog.setText("API Keyが設定されていません。\n.envファイルにGENAI_API_KEYを設定してください。")
+        error_dialog.exec()
+        self.close()
 
 
 class ResultDialog(QtWidgets.QDialog):
