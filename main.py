@@ -50,7 +50,7 @@ class SelectWidget(QtWidgets.QWidget):
 
         QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CursorShape.CrossCursor))
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint | QtCore.Qt.WindowType.Tool)
+        self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint)
 
         self.show()
 
@@ -220,6 +220,7 @@ async def run_app():
     apply_stylesheet(app, theme='dark_blue.xml', extra={"font_size": 18})
 
     window = SelectWidget()
+    window.activateWindow()
     window.show()
 
     while True:
