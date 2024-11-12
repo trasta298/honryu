@@ -63,7 +63,7 @@ class SelectWidget(QtWidgets.QWidget):
         qp.drawRect(self.rect())
 
         if not self.begin.isNull() and not self.end.isNull():
-            QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
+            QtWidgets.QApplication.restoreOverrideCursor()
             rect = QtCore.QRect(self.begin, self.end).normalized()
 
             qp.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Clear)
